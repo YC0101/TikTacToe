@@ -6,9 +6,10 @@ const initialValue = {
   },
 };
 export default class Store {
-  #state = initialValue;
-  constructor(players) {
+  //#state = initialValue;
+  constructor(players, key) {
     this.players = players;
+    this.storageKey = key;
   }
 
   get stats() {
@@ -102,7 +103,8 @@ export default class Store {
   }
 
   #getState() {
-    return this.#state;
+    const item = window.localStorage.getItem(this.storageKey);
+    return item ? JSON.parse(item) : initialValue;
   }
 
   #saveState(stateOrFn) {
@@ -118,6 +120,6 @@ export default class Store {
       default:
         throw new Error("saveState: Invalid argument");
     }
-    this.#state = newState;
+    window.localStorage.setItem(this.storageKey, JSON.stringify(newState));
   }
 }

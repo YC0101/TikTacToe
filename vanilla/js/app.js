@@ -162,31 +162,30 @@ const players = [
 
 function init() {
   const view = new View();
-  const store = new Store(players);
+  const store = new Store(players, "tic-tac-toe-vanilla");
 
-  view.bindGameResetEvent((event) => {
+  function initView() {
     view.closeAll();
-    store.reset();
     view.clearMoves();
     view.setTurnIndecator(store.game.currentPlayer);
-
     view.updateScoreboard(
       store.stats.playerWithStats[0].wins,
       store.stats.playerWithStats[1].wins,
       store.stats.ties
     );
+    view.initializeMoves(store.game.moves);
+  }
+
+  initView();
+
+  view.bindGameResetEvent((event) => {
+    store.reset();
+    initView();
   });
 
   view.bindNewRoundEvent((event) => {
     store.newRound();
-    view.closeAll();
-    view.clearMoves();
-    view.setTurnIndecator(store.game.currentPlayer);
-    view.updateScoreboard(
-      store.stats.playerWithStats[0].wins,
-      store.stats.playerWithStats[1].wins,
-      store.stats.ties
-    );
+    initView();
   });
 
   view.bindPlayerMoveEvent((square) => {
