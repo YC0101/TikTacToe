@@ -1,4 +1,4 @@
-//import Store from "./store.js";
+import Store from "./store.js";
 import View from "./view.js";
 // Strict mode is a way to enforce a stricter set of JavaScript rules,
 // making the code safer and less error-prone.
@@ -144,14 +144,56 @@ import View from "./view.js";
 
 //window.addEventListener("load", () => App.init());
 
+// Our players "config" - defines icons, colors, name, etc.
+const players = [
+  {
+    id: 1,
+    name: "Player 1",
+    iconClass: "fa-x",
+    colorClass: "turquoise",
+  },
+  {
+    id: 2,
+    name: "Player 2",
+    iconClass: "fa-o",
+    colorClass: "yellow",
+  },
+];
+
 function init() {
   const view = new View();
+  const store = new Store(players);
 
   view.bindGameResetEvent((event) => {});
-  view.bindNewRoundEvent((event) => {});
-  view.bindPlayerMoveEvent((event) => {
-    view.setTurnIndecator(2);
-    view.handlePlayerMove(event.target, 2);
+
+  view.bindNewRoundEvent((event) => {
+    view.closeModal();
+    store.reset();
+    view.clearMoves();
+    view.setTurnIndecator(store.game.currentPlayer);
+  });
+
+  view.bindPlayerMoveEvent((square) => {
+    const existingMove = store.game.moves.find(
+      (move) => move.squareId === +square.id
+    );
+
+    if (existingMove) {
+      return;
+    }
+
+    view.handlePlayerMove(square, store.game.currentPlayer);
+    store.playerMove(+square.id);
+    if (store.game.status.isComplete) {
+      view.openModal(
+        store.game.status.winner
+          ? `${store.game.status.winner.name} wins`
+          : "Tie!"
+      );
+      return;
+    }
+
+    view.setTurnIndecator(store.game.currentPlayer);
   });
 }
 

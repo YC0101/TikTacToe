@@ -29,6 +29,7 @@ export default class View {
   bindGameResetEvent(handler) {
     //Do the function in controller not in view
     this.$.resetBtn.addEventListener("click", handler);
+    this.$.modalBtn.addEventListener("click", handler);
   }
 
   bindNewRoundEvent(handler) {
@@ -37,7 +38,22 @@ export default class View {
   }
   bindPlayerMoveEvent(handler) {
     this.$$.squares.forEach((square) => {
-      square.addEventListener("click", handler);
+      square.addEventListener("click", () => handler(square));
+    });
+  }
+
+  openModal(message) {
+    this.$.modal.classList.remove("hidden");
+    this.$.modalText.textContent = message;
+  }
+
+  closeModal() {
+    this.$.modal.classList.add("hidden");
+  }
+
+  clearMoves() {
+    this.$$.squares.forEach((square) => {
+      square.replaceChildren();
     });
   }
 
@@ -54,23 +70,18 @@ export default class View {
   //Put X and O in the grid for each player movement
   handlePlayerMove(squareEl, player) {
     const icon = document.createElement("i");
-    icon.classList.add(
-      "fa-solid",
-      player === 1 ? "fa-x" : "fa-o",
-      player === 1 ? "yellow" : "turquoise"
-    );
+    icon.classList.add("fa-solid", player.iconClass, player.colorClass);
     squareEl.replaceChildren(icon);
   }
 
-  setTurnIndecator(player) {
+  setTurnIndecator(player, opponent) {
     const icon = document.createElement("i");
     const label = document.createElement("p");
 
-    this.$.turn.classList.add(player === 1 ? "yellow" : "turquoise");
-    this.$.turn.classList.remove(player === 1 ? "turquoise" : "yellow");
+    this.$.turn.classList.add(player.colorClass);
 
-    icon.classList.add("fa-solid", player === 1 ? "fa-x" : "fa-o");
-    label.innerText = player === 1 ? "Player 1" : "Player 2";
+    icon.classList.add("fa-solid", player.colorClass, player.iconClass);
+    label.innerText = `${player.name}, you're up!`;
 
     this.$.turn.replaceChildren(icon, label);
   }
