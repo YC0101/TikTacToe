@@ -164,31 +164,35 @@ function init() {
   const view = new View();
   const store = new Store(players, "tic-tac-toe-vanilla");
 
-  function initView() {
-    view.closeAll();
-    view.clearMoves();
-    view.setTurnIndecator(store.game.currentPlayer);
-    view.updateScoreboard(
-      store.stats.playerWithStats[0].wins,
-      store.stats.playerWithStats[1].wins,
-      store.stats.ties
-    );
-    view.initializeMoves(store.game.moves);
-  }
+  store.addEventListener("statechange", () => {
+    view.render(store.game, store.stats);
+  });
+  // function initView() {
+  //   view.closeAll();
+  //   view.clearMoves();
+  //   view.setTurnIndecator(store.game.currentPlayer);
+  //   view.updateScoreboard(
+  //     store.stats.playerWithStats[0].wins,
+  //     store.stats.playerWithStats[1].wins,
+  //     store.stats.ties
+  //   );
+  //   view.initializeMoves(store.game.moves);
+  // }
 
   window.addEventListener("storage", () => {
-    initView();
+    view.render(store.game, store.stats);
   });
-  initView();
+
+  view.render(store.game, store.stats);
 
   view.bindGameResetEvent((event) => {
     store.reset();
-    initView();
+    //view.render(store.game, store.stats);
   });
 
   view.bindNewRoundEvent((event) => {
     store.newRound();
-    initView();
+    //view.render(store.game, store.stats);
   });
 
   view.bindPlayerMoveEvent((square) => {
@@ -200,18 +204,20 @@ function init() {
       return;
     }
 
-    view.handlePlayerMove(square, store.game.currentPlayer);
-    store.playerMove(+square.id);
-    if (store.game.status.isComplete) {
-      view.openModal(
-        store.game.status.winner
-          ? `${store.game.status.winner.name} wins`
-          : "Tie!"
-      );
-      return;
-    }
+    //view.handlePlayerMove(square, store.game.currentPlayer);
 
-    view.setTurnIndecator(store.game.currentPlayer);
+    store.playerMove(+square.id);
+    // if (store.game.status.isComplete) {
+    //   view.openModal(
+    //     store.game.status.winner
+    //       ? `${store.game.status.winner.name} wins`
+    //       : "Tie!"
+    //   );
+    //   return;
+    // }
+
+    //view.setTurnIndecator(store.game.currentPlayer);
+    //view.render(store.game, store.stats);
   });
 }
 
