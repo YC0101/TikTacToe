@@ -15,6 +15,9 @@ export default class View {
     this.$.modalText = this.#qs('[data-id="modal-text"]');
     this.$.modalBtn = this.#qs('[data-id="modal-btn"]');
     this.$.turn = this.#qs('[data-id="turn"]');
+    this.$.p1Wins = this.#qs('[data-id="p1-wins"]');
+    this.$.p2Wins = this.#qs('[data-id="p2-wins"]');
+    this.$.ties = this.#qs('[data-id="ties"]');
 
     this.$$.squares = this.#qsAll('[data-id="square"]');
 
@@ -34,7 +37,7 @@ export default class View {
 
   bindNewRoundEvent(handler) {
     //Do the function in controller not in view
-    this.$.resetBtn.addEventListener("click", handler);
+    this.$.newRoundBtn.addEventListener("click", handler);
   }
   bindPlayerMoveEvent(handler) {
     this.$$.squares.forEach((square) => {
@@ -42,13 +45,32 @@ export default class View {
     });
   }
 
+  updateScoreboard(p1Wins, p2Wins, ties) {
+    this.$.p1Wins.innerText = `${p1Wins} Wins`;
+    this.$.p2Wins.innerText = `${p2Wins} Wins`;
+    this.$.ties.innerText = `${ties}`;
+  }
+
   openModal(message) {
     this.$.modal.classList.remove("hidden");
     this.$.modalText.textContent = message;
   }
 
-  closeModal() {
+  #closeModal() {
     this.$.modal.classList.add("hidden");
+  }
+
+  #closeMenu() {
+    this.$.menuItems.classList.add("hidden");
+    this.$.menuBtn.classList.remove("border");
+    const icon = this.$.menuBtn.querySelector("i");
+    icon.classList.add("fa-chevron-down");
+    icon.classList.remove("fa-chevron-up");
+  }
+
+  closeAll() {
+    this.#closeModal();
+    this.#closeMenu();
   }
 
   clearMoves() {
