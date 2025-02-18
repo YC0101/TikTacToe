@@ -181,21 +181,21 @@ export default function App() {
             style={{ backgroundColor: "var(--turquoise)" }}
           >
             <p>Player 1</p>
-            <span data-id="p1-wins">{stats.playerWithStats[0].wins} Wins</span>
+            <span>{stats.playerWithStats[0].wins} Wins</span>
           </div>
           <div
             className="score shadow"
             style={{ backgroundColor: "var(--light-gray)" }}
           >
             <p>Ties</p>
-            <span data-id="ties">{stats.ties}</span>
+            <span>{stats.ties}</span>
           </div>
           <div
             className="score shadow"
             style={{ backgroundColor: "var(--yellow)" }}
           >
             <p>Player 2</p>
-            <span data-id="p2-wins">{stats.playerWithStats[1].wins} Wins</span>
+            <span>{stats.playerWithStats[1].wins} Wins</span>
           </div>
         </div>
       </main>
