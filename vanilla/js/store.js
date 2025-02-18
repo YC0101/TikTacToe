@@ -5,6 +5,7 @@ const initialValue = {
     allGames: [],
   },
 };
+
 export default class Store extends EventTarget {
   //#state = initialValue;
   constructor(players, key) {
@@ -122,6 +123,7 @@ export default class Store extends EventTarget {
         throw new Error("saveState: Invalid argument");
     }
     window.localStorage.setItem(this.storageKey, JSON.stringify(newState));
+    //This make sure the event listener works in app.js
     this.dispatchEvent(new Event("statechange"));
   }
 }

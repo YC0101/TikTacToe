@@ -179,6 +179,7 @@ function init() {
   //   view.initializeMoves(store.game.moves);
   // }
 
+  // Check if storage change in another tab
   window.addEventListener("storage", () => {
     view.render(store.game, store.stats);
   });
